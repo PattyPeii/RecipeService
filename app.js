@@ -27,11 +27,11 @@ mongoose.connect(
 );
 
 // routes definitions
-const categoryRouter = require("./routes/CategoryRoutes");
+const recipeRoutes = require("./routes/RecipeRoutes");
 
 app.get('/', (req, res) => res.send('Recipe Service On!!'));
 
-app.use("/category", categoryRouter);
+app.use("/recipe", recipeRoutes);
 
 app.listen(process.env.API_PORT, () => {
   console.log(`Server is running on port ${process.env.API_PORT}`);
