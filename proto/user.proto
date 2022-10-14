@@ -1,0 +1,16 @@
+syntax ="proto3";
+
+service UserService {
+    rpc GetUserInformation() returns (UserInfo) {}
+}
+
+message Empty{}
+
+message UserInfo {
+    string user_id =1;
+    string fullname=2;
+    string email=3;
+    int32 phone =4;
+    string phone =5;
+    string birthday =6;
+}

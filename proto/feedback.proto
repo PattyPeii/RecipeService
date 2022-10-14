@@ -1,0 +1,26 @@
+syntax ="proto3";
+
+service UserService {
+    rpc GetFeedBack() returns (Feedback) {}
+}
+
+message Empty{}
+
+message Feedback{
+    repeated RecipeItem FeedbackComment=1;
+    repeated RecipeItem FeedbackVote=2;
+}
+
+message FeedbackComment{
+    string feedback_id =1;
+    string user_id=2;
+    string recipe_id=3;
+    string comment=4;
+}
+
+message FeedbackVote{
+    string feedback_id =1;
+    string user_id=2;
+    string recipe_id=3;
+    string vote=4;
+}

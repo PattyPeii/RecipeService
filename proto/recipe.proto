@@ -1,0 +1,35 @@
+syntax ="proto3";
+
+service RecipeService {
+    rpc CreateRecipe() returns (RecipeItem) {}
+    rpc SearchRecipe() returns (RecipeList) {}
+    rpc GetRecipe() returns (RecipeItem) {}
+    rpc CustomizeRecipe() returns (RecipeItem) {}
+    rpc SaveRecipe() returns (RecipeItem) {}
+    rpc GetFollowingRecipe() returns (FollowingRecipeList) {}
+    rpc DeleteRecipe() returns (Empty) {}
+    rpc RemoveSaveRecipe() returns (Empty) {}
+
+}
+
+message Empty{}
+
+message RecipeItem {
+    string recipe_id =1;
+    string name=2;
+    string description=3;
+    string image_url =4;
+}
+
+message RecipeList{
+    repeated RecipeItem recipes=1;
+}
+
+message FollowingRecipeList{
+    repeated FollowingRecipeItem FollowingRecipes=1;
+}
+
+message FollowingRecipeItem{
+    string recipe_id =1;
+    string user_id=2;
+}
