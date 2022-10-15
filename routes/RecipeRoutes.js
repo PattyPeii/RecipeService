@@ -1,5 +1,4 @@
 const express = require("express");
-const { getCategory } = require("../controllers/CategoryController");
 const { createRecipe, getRecipe, deleteRecipe, getRecipeByID, updateRecipe } = require("../controllers/RecipeController");
 
 const router = express.Router();

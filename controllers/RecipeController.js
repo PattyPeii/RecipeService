@@ -1,14 +1,26 @@
 const connection = require('../database');
+const util = require('util');
+const query = util.promisify(connection.query).bind(connection);
+const { userClient } = require('../grpc-client');
+
+function getUserInformation(obj) {
+  return new Promise((resolve, reject) => userClient.GetUserInformation(obj, (err, response) => {
+    if (err) {
+      return reject(err)
+    }
+    resolve(response)        
+  }))
+}
 
 exports.getRecipe = async (req, res) => {
   try {
-    connection.query(
-      "SELECT * FROM `recipes`",
-      function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
-      }
-    );
+    const results = await query('SELECT * FROM recipes');
+    for (const recipe of results) {
+      const user = await getUserInformation({ user_id: recipe.user_id })
+      recipe.user = { user_id: user.user_id, fullname: user.fullname }
+      delete recipe.user_id
+    }
+    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -16,13 +28,13 @@ exports.getRecipe = async (req, res) => {
 
 exports.getRecipeByID = async (req, res) => {
   try {
-    connection.query(
-      `SELECT * FROM recipes WHERE id = ${req.params.id}`,
-      function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
-      }
-    );
+    const results = await query('SELECT * FROM recipes WHERE id = ?', [req.params.id]);
+    for (const recipe of results) {
+      const user = await getUserInformation({ user_id: recipe.user_id })
+      recipe.user = { user_id: user.user_id, fullname: user.fullname }
+      delete recipe.user_id
+    }
+    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,18 +42,11 @@ exports.getRecipeByID = async (req, res) => {
 
 exports.createRecipe = async (req, res) => {
   if (!req.body) return next(new AppError("No form data found", 404));
-  var datenow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  var sql = "INSERT INTO recipes (name, description, image_url, createdAt, updatedAt) VALUES(?)";
-  var values = [req.body.name, req.body.description, req.body.image_url, datenow, datenow];
+  var datenow = new Date();
+  var values = [req.body.name, req.body.description, req.body.image_url, datenow, datenow, 1];
   try {
-    connection.query(
-      sql,
-      [values],
-      function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
-      }
-    );
+    const results = await query('INSERT INTO recipes (name, description, image_url, createdAt, updatedAt, user_id) VALUES(?)', [values]);
+    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -49,31 +54,20 @@ exports.createRecipe = async (req, res) => {
 
 exports.updateRecipe = async (req, res) => {
   if (!req.body) return next(new AppError("No form data found", 404));
-  var datenow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  var sql = `UPDATE recipes SET name = "${req.body.name}", description = "${req.body.description}", image_url = "${req.body.image_url}", updatedAt = "${datenow}" WHERE id = ${req.params.id}`;
+  var datenow = new Date();
   try {
-    connection.query(
-      sql,
-      function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
-      }
-    );
+    const val = [req.body.name, req.body.description, req.body.image_url, datenow, req.params.id]
+    const results = await query('UPDATE recipes SET name = ?, description = ?, image_url = ?, updatedAt = ? WHERE id = ?', val);
+    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 exports.deleteRecipe = async (req, res) => {
-  var sql = `DELETE FROM recipes WHERE id = ${req.params.id}`;
   try {
-    connection.query(
-      sql,
-      function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
-      }
-    );
+    const results = await query('DELETE FROM recipes WHERE id = ?', [req.params.id]);
+    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
