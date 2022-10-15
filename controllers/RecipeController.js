@@ -46,7 +46,7 @@ exports.createRecipe = async (req, res) => {
   var values = [req.body.name, req.body.description, req.body.image_url, datenow, datenow, 1];
   try {
     const results = await query('INSERT INTO recipes (name, description, image_url, createdAt, updatedAt, user_id) VALUES(?)', [values]);
-    res.json(results);
+    res.json({ id: results.insertId });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -57,8 +57,8 @@ exports.updateRecipe = async (req, res) => {
   var datenow = new Date();
   try {
     const val = [req.body.name, req.body.description, req.body.image_url, datenow, req.params.id]
-    const results = await query('UPDATE recipes SET name = ?, description = ?, image_url = ?, updatedAt = ? WHERE id = ?', val);
-    res.json(results);
+    await query('UPDATE recipes SET name = ?, description = ?, image_url = ?, updatedAt = ? WHERE id = ?', val);
+    res.json({ id: req.params.id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -66,8 +66,8 @@ exports.updateRecipe = async (req, res) => {
 
 exports.deleteRecipe = async (req, res) => {
   try {
-    const results = await query('DELETE FROM recipes WHERE id = ?', [req.params.id]);
-    res.json(results);
+    await query('DELETE FROM recipes WHERE id = ?', [req.params.id]);
+    res.json({ id: req.params.id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
