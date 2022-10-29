@@ -13,8 +13,42 @@ function getUserInformation(obj) {
 }
 
 exports.getRecipe = async (req, res) => {
+  const text = req.query.text
+  const categoryId = req.query.category_id
+  const ingrediantId = req.query.ingrediant_id
+  const toolId = req.query.tool_id
+
+  let condition = []
+  let params = []
+  let where = ''
+  if (text) {
+    condition.push('r.name like ?')
+    params.push(`%${text}%`)
+  }
+  if (categoryId) {
+    condition.push('rc.category_id in (?)')
+    params.push(categoryId)
+  }
+  if (ingrediantId) {
+    condition.push('ri.ingrediant_id in (?)')
+    params.push(ingrediantId)
+  }
+  if (toolId) {
+    condition.push('rt.tool_id in (?)')
+    params.push(toolId)
+  }
+  if (condition.length) {
+    where = 'where ' + condition.join(' and ')
+  }
+
   try {
-    const results = await query('SELECT * FROM recipes');
+    const results = await query(`SELECT distinct r.*
+    from recipes r 
+    left join recipe_categories rc on rc.recipe_id = r.id 
+    left join recipe_ingrediants ri on ri.recipe_id = r.id 
+    left join recipe_tools rt on rt.recipe_id  = r.id 
+    ${where}
+    order by r.id`, params);
     for (const recipe of results) {
       const user = await getUserInformation({ user_id: recipe.user_id })
       recipe.user = { user_id: user.user_id, fullname: user.fullname }

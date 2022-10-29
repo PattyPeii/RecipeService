@@ -12,9 +12,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes definitions
 const recipeRoutes = require("./routes/RecipeRoutes");
+const feedRoutes = require("./routes/FeedRoutes");
 
 app.get('/', (req, res) => res.send('Recipe Service On!!'));
 app.use("/recipe", recipeRoutes);
+app.use("/feed", feedRoutes);
 
 app.listen(process.env.API_PORT, () => {
   console.log(`Server is running on port ${process.env.API_PORT}`);
