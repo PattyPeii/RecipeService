@@ -103,7 +103,7 @@ exports.getRecipeByID = async (req, res) => {
       recipe.tools = []
       for (const tool of toolResults) {
         let toolResult = {
-          tool_id: tool.name,
+          tool: tool.name,
         }
         recipe.tools.push(toolResult)
       }
