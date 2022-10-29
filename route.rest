@@ -1,0 +1,63 @@
+GET http://localhost:5001/recipe
+
+###
+GET http://localhost:5001/recipe/28
+
+###
+POST http://localhost:5001/recipe
+Content-Type: application/json
+
+{
+    "name": "Tom yum kung",
+    "description": "Spicy thai food",
+    "image_url": null,
+    "user_id": 1,
+    "category_id": 1,
+    "ingrediants": [
+        {
+            "ingrediant_id": 1, 
+            "amount": 1, 
+            "unit_id": 1
+        },
+        {
+            "ingrediant_id": 1, 
+            "amount": 1, 
+            "unit_id": 1
+        }
+    ],
+    "instructions": [
+        {
+            "instruction": "Pour the water into a pot, add the lemon grass and kaffir-lime leaves and heat it",
+            "image_url": null,
+            "video_url": null
+        },
+        {
+            "instruction": "Add the shrimps when the water is boiling and cover the pot.",
+            "image_url": null,
+            "video_url": null
+        }
+    ],
+    "tools": [
+        {
+            "tool_id": 1
+        },
+        {
+            "tool_id": 2
+        }
+
+    ]
+
+}
+
+
+###
+GET http://localhost:5001/ingrediant
+
+
+###
+POST http://localhost:5001/ingrediant
+Content-Type: application/json
+
+{
+  "name": "Pork"
+}

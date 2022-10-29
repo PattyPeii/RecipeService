@@ -1,26 +1,25 @@
 const connection = require('../database');
 
 
-
-exports.getCategory = async (req, res) => {
+exports.getUnit = async (req, res) => {
   try {
-    const results = await query('SELECT * FROM categories');
+    const results = await query('SELECT * FROM units');
     res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.getCategoryByID = async (req, res) => {
+exports.getUnitByID = async (req, res) => {
   try {
-    const results = await query('SELECT * FROM categories WHERE id = ?', [req.params.id]);
+    const results = await query('SELECT * FROM units WHERE id = ?', [req.params.id]);
     res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.createCategory = async (req, res) => {
+exports.createUnit = async (req, res) => {
   if (!req.body) return next(new AppError("No form data found", 404));
   var datenow = new Date();
   var values = [
@@ -30,28 +29,28 @@ exports.createCategory = async (req, res) => {
       datenow
       ];
   try {
-    const results = await query('INSERT INTO categories (id, name, createdAt, updatedAt) VALUES(?)', [values]);
+    const results = await query('INSERT INTO units (id, name, createdAt, updatedAt) VALUES(?)', [values]);
     res.json({ id: results.insertId });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.updateCategory = async (req, res) => {
+exports.updateUnit = async (req, res) => {
   if (!req.body) return next(new AppError("No form data found", 404));
   var datenow = new Date();
   try {
     const val = [req.body.id, req.body.name, datenow, req.params.id]
-    await query('UPDATE categories SET id = ?, name = ?, updatedAt = ? WHERE id = ?', val);
+    await query('UPDATE units SET id = ?, name = ?, updatedAt = ? WHERE id = ?', val);
     res.json({ id: req.params.id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.deleteCategory = async (req, res) => {
+exports.deleteUnit = async (req, res) => {
   try {
-    await query('DELETE FROM categories WHERE id = ?', [req.params.id]);
+    await query('DELETE FROM units WHERE id = ?', [req.params.id]);
     res.json({ id: req.params.id });
   } catch (err) {
     res.status(500).json({ error: err.message });
