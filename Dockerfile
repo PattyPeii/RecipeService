@@ -1,7 +1,7 @@
 ### STAGE 1: Build ### 
 FROM node:16-alpine AS build 
 WORKDIR /usr/src/app 
-COPY package.json package-lock.json ./ 
+COPY package.json *.proto package-lock.json ./ 
 RUN npm install 
 COPY . .
 EXPOSE 5001
