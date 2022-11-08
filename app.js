@@ -7,8 +7,8 @@ require("dotenv").config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// // MongoDB connection
-// require("./mongodb");
+// MongoDB connection
+require("./mongodb");
 
 // routes definitions
 const recipeRoutes = require("./routes/RecipeRoutes");

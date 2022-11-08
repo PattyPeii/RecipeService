@@ -1,9 +1,9 @@
 const mysql = require("mysql");
 
 var config = {
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASS,
+  user: 'admin',
+  database: 'cooknet',
+  password: 'SW_arch1234',
 };
 
 // Later on when running from Google Cloud, env variables will be passed in container cloud connection config
@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "production") {
 // When running from localhost, get the config from .env
 else {
   console.log("Running from localhost. Connecting to DB directly.");
-  config.host = process.env.DB_HOST;
+  config.host = '34.143.196.84';
 }
 
 let connection = mysql.createConnection(config);
