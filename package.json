@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "nodemon server --timeout 10000"
+    "test": "nodemon server --timeout 10000",
+    "swagger-autogen": "node swagger.js"
   },
   "keywords": [],
   "author": "",
@@ -13,11 +14,14 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.7.1",
     "@grpc/proto-loader": "^0.7.3",
+    "and": "^0.0.3",
     "body-parser": "^1.20.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "mongoose": "^6.4.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "swagger-autogen": "^2.22.0",
+    "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
     "chai": "^4.3.6",
