@@ -24,11 +24,13 @@ require("./mongodb");
 const recipeRoutes = require("./routes/RecipeRoutes");
 const ingrediantRoutes = require("./routes/IngrediantRoutes");
 const feedRoutes = require("./routes/FeedRoutes");
+const categoryRoutes = require("./routes/CategoryRoutes");
 
 app.get("/", (req, res) => res.send("Recipe Service On!!"));
 app.use("/recipe", recipeRoutes);
 app.use("/ingrediant", ingrediantRoutes);
 app.use("/feed", feedRoutes);
+app.use("/category", categoryRoutes);
 
 // swagger doc
 var options = {}
